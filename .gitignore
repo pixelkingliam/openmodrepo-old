@@ -1,0 +1,8 @@
+LOGS/*
+LOGS/
+IMGS/*
+CONF/
+CONF/*
+IMGS/* \
+IMGS/
+*.exe

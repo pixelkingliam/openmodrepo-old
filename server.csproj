@@ -1,0 +1,16 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <ItemGroup>
+      <Compile Include="SRCS/server.cs"/>
+      <Compile Include="SRCS/logger.cs"/>
+      <Compile Include="SRCS/config.cs"/>
+      <Compile Include="SRCS/RESP/image.cs"/>
+      <Compile Include="SRCS/RESP/html.cs"/>
+      <Compile Include="SRCS/RESP/http.cs"/>
+      <Compile Include="SRCS/content.cs"/>
+
+      <Reference Include="Newtonsoft.Json.dll"/>
+    </ItemGroup>
+    <Target Name="Build">
+      <Csc References="@(Reference)" Sources="@(Compile)" OutputAssembly="server.exe"/>  
+    </Target>
+  </Project>
