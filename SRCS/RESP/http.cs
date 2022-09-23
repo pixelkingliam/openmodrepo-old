@@ -61,12 +61,8 @@ namespace HTTPResponses
                 Log.Success("Loaded " + urlarray[i]);
                 i++;
             }
-            
             return urlarray;
         }
-        public static bool UrlExists(string url)
-        {
-            return true;
-        }
+        
     }
 }

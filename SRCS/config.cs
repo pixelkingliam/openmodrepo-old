@@ -10,6 +10,7 @@ namespace Config
     {
         // default values are set here in case a new server.json must be generated
         public static string ip = "127.0.0.1";
+        public static bool customip = false;
         public static ushort port = 1433;
         public static int logcount = 7;
         public static bool allowillegalfilepath = false;
@@ -41,17 +42,17 @@ namespace Config
                 var jsonserverconf = JObject.Parse(System.IO.File.ReadAllText(@"CONF/server.json"));
                 if (
                     // i have no idea how adding the ! operator to all the checks makes this work properly, time to never touch it again!
-                        !jsonserverconf.ContainsKey("server-configs.ip") &
-                        !jsonserverconf.ContainsKey("server-configs.sport") &
-                        !jsonserverconf.ContainsKey("server-configs.logcount") &
-                        !jsonserverconf.ContainsKey("server-configs.allowillegalfilepath") &
-                        
-                        !jsonserverconf.ContainsKey("server-info.builddate")  
-                        
+                        jsonserverconf["server-configs"].ToObject<JObject>().ContainsKey("ip") |
+                        jsonserverconf["server-configs"].ToObject<JObject>().ContainsKey("customip") |
+                        jsonserverconf["server-configs"].ToObject<JObject>().ContainsKey("port") |
+                        jsonserverconf["server-configs"].ToObject<JObject>().ContainsKey("logcount") |
+                        jsonserverconf["server-configs"].ToObject<JObject>().ContainsKey("allowillegalfilepath") |
+                        jsonserverconf["server-info"].ToObject<JObject>().ContainsKey("builddate")  
+                    
                         
                     )
                     {// newer versions of the server might add more options to the configs, this check makes sure that the config is regenerated whenever the server is updated
-                        if (!jsonserverconf.ContainsKey("server-info.builddate") || !(jsonserverconf["server-info.builddate"].ToString() == builddate))
+                        if (!(jsonserverconf["server-info"].ToObject<JObject>().ContainsKey("builddate") || jsonserverconf["server-info"]["builddate"].ToString() == builddate))
                         {
                             File.Delete(@"CONF/server.json");
                             Create();
@@ -72,6 +73,7 @@ namespace Config
             var serverconfigs = new JObject();
             var serverinfo = new JObject();
             serverconfigs["ip"] = ip;
+            serverconfigs["customip"] = customip;
             serverconfigs["port"] = port;
             serverconfigs["logcount"] = logcount;
             serverconfigs["allowillegalfilepath"] = allowillegalfilepath;
@@ -88,6 +90,7 @@ namespace Config
         {
             JObject jsonserverconf = JObject.Parse(System.IO.File.ReadAllText("CONF/server.json"));
             ip = (string)jsonserverconf.SelectToken("server-configs.ip");
+            customip = (bool)jsonserverconf.SelectToken("server-configs.customip");
             port = (ushort)jsonserverconf.SelectToken("server-configs.port");
             logcount = (int)jsonserverconf.SelectToken("server-configs.logcount");
             allowillegalfilepath = (bool)jsonserverconf.SelectToken("server-configs.allowillegalfilepath");

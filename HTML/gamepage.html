@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+<style>
+  @import url('https://rsms.me/inter/inter.css');
+
+  html {
+    font-family: 'Inter', sans-serif;
+  }
+
+  @supports (font-variation-settings: normal) {
+    html {
+      font-family: 'Inter var', sans-serif;
+    }
+
+  }
+
+  body {
+    background-color: rgb(62, 68, 85);
+        padding: 0;
+    margin: 0;
+  }
+
+  
+
+  #navbar {
+    width: 100vw;
+    list-style-type: none;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333;
+    position: -webkit-sticky;
+    height: 3.7vw;
+    position: sticky;
+    top: 0;
+  }
+
+
+
+  #navbar li a {
+    font-family: "Inter";
+    font-size: 1.3vw;
+    float: left;
+    display: block;
+    color: white;
+    text-align: start;
+    padding-right: 2vw;
+    padding-left: 2vw;
+    padding-top: 1vw;
+    padding-bottom: 1vw;
+    text-decoration: none;
+    width: fit-content;
+    height: 3.7vw;
+  }
+
+  .b {
+    float: left;
+  }
+
+  #navbar li a:hover {
+
+    background-color: rgb(248, 149, 0);
+
+  }
+
+  #navbar li a.activated {
+    background-color: rgb(0, 218, 83)
+  }
+
+  
+
+  #topoverlay {
+    background: rgb(55, 66, 68);
+    margin: 0px;
+    padding: 0px;
+    vertical-align: top;
+    height: 15vw;
+    width: 100%;
+
+  }
+
+  #topoverlay h1 {
+    font-size: 4vw;
+    margin: 0;
+    margin-left: 1vw;
+    text-align: start;
+
+  }
+
+  #topoverlay p {
+    font-size: 1vw;
+    margin-left: 1vw;
+    text-align: start;
+
+  }
+  #topoverlay img
+  {
+    height: 14.5vw;
+  }
+
+  #sideoverlay {
+    background: rgb(24, 42, 51);
+    margin: 0px;
+    padding: 0px;
+    vertical-align: top;
+    height: 32.5vmax;
+    width: 20%;
+  }
+  #sideoverlay ul {
+    margin: 5%;
+    padding-left: 0;
+    height: 29vmax; 
+  	overflow-y: auto;
+  }
+  #sideoverlay ul a {
+    text-decoration: none;
+  }
+  #sideoverlay ul a div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin : 2vh;
+    margin-left: 0;
+    margin-top : 0;
+    padding: 0.5vh;
+    height: 5vh;
+    background-color:rgb(75, 110, 88) ;
+    border:  solid rgb(19, 37, 46);
+    border-radius: 1.17vw;
+  }
+  #sideoverlay ul a div p
+  {
+    color: black;
+    margin : 0;
+
+  }
+  
+</style>
+
+<head>
+  <title>OpenModRepo</title>
+</head>
+
+<body>
+  <ul id="navbar">
+
+    <p>navbargoeshere!!</p>
+
+  </ul>
+  <div id="topoverlay">
+    <table>
+      <tr>
+        <th>
+          <img class="Posterimage"  src="imagehere!!" />
+        </th>
+        <td style="vertical-align: top;">
+          <h1>topcontgoeshere!!</h1>
+          <p>topcontgoeshere!!</p>
+        </td>
+      </tr>
+    </table>
+  </div>
+  <div id="sideoverlay">
+    <br>
+    <ul>
+    <p>Catshere!</p>
+  </ul>
+  </div>
+
+</body>
+
+</html>

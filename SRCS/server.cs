@@ -35,14 +35,11 @@ namespace OpenModRepo
                 // Peel out the requests and response objects
                 HttpListenerRequest req = ctx.Request;
                 HttpListenerResponse resp = ctx.Response;
-
                 // Print out some info about t  he request
                 Log.Network(req.Url.ToString());
                 Log.Network(req.HttpMethod);
                 Log.Network(req.UserHostName);
                 Log.Network(req.UserAgent);
-                Console.WriteLine();
-
                 
               
                 
@@ -89,19 +86,20 @@ namespace OpenModRepo
 
         public static void Main(string[] args)
         {
-            
+            AppDomain.CurrentDomain.ProcessExit += new EventHandler (OnProcessExit); 
             Conf.Check();
             Conf.Init();
             Cont.Check();
             Cont.Init();
-            url = string.Format("http://localhost:{0}/", Conf.port);
+
+            url = string.Format("http://{0}:{1}/", Conf.customip ? Conf.ip : "*", Conf.port);
             HTTPUrls.ValidUrls = HTTPUrls.GenUrls();
             Log.Clean(Conf.logcount);
             // Create a Http server and start listening for incoming connections
             listener = new HttpListener();
             listener.Prefixes.Add(url);
             listener.Start();
-            Log.Success(String.Format("OpenModRepo Listenning on {0}", url));
+            Log.Success(String.Format("OpenModRepo Listenning on {0}", Conf.customip ? url : "port " + Conf.port));
             
             // Handle requests
             Task listenTask = HandleIncomingConnections();
@@ -109,6 +107,11 @@ namespace OpenModRepo
 
             // Close the listener
             listener.Close();
+        }
+        // while empty at the moment this function will be used to save information when the server shut downs
+        static void OnProcessExit (object sender, EventArgs e)
+        {
+            Log.Info("Shutting Down...");
         }
     }
 }

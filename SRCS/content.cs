@@ -6,11 +6,17 @@ using Newtonsoft.Json.Linq;
 
 namespace Content
 {
+    class navbarEntry
+    {
+        public string Name;
+        public string Link;
+    }
     class Cont
     {
-        public static string homepage;
-        public static JArray games;
-        public static JArray images;
+        public static string homepage = "";
+        public static JArray games = new JArray();
+        public static JArray images = new JArray();
+        public static navbarEntry[] navbar =  { new navbarEntry() {Name = "Home", Link = "/"}, new navbarEntry() {Name = "Games", Link = "/games"}};
         public static string[] builtinurls;
         // This function checks to see if the CONF/content.json file can be used with the program, this is mainly to not try to load the json file if it is invalid, or does not contain proper key-values pair, usually user-error
         public static void Check()
@@ -39,7 +45,8 @@ namespace Content
                         jsonservercont.ContainsKey("games") ||
                         jsonservercont.ContainsKey("hostname ") ||
                         jsonservercont.ContainsKey("images") ||
-                        jsonservercont.ContainsKey("builtin-urls")                         
+                        jsonservercont.ContainsKey("builtin-urls") ||
+                        jsonservercont.ContainsKey("navbar")                         
                     )
                     {
                     }else
@@ -57,8 +64,9 @@ namespace Content
             //var serverconfigs = new JObject();
             //var serverinfo = new JObject();
             jsonservercont["homepage"] = "";
-            jsonservercont["games"] = new JArray();
-            jsonservercont["images"] = new JArray();
+            jsonservercont["games"] = games;
+            jsonservercont["images"] = images;
+            jsonservercont["navbar"] = JArray.FromObject(navbar);
             // a blank content.json should contain a full builtin-urls array
             jsonservercont["builtin-urls"] = new JArray() { "/games"};
             File.WriteAllText(@"CONF/content.json", jsonservercont.ToString());
@@ -70,6 +78,7 @@ namespace Content
             homepage = (string)jsonservercont.SelectToken("homepage");
             games = jsonservercont.SelectToken("games").ToObject<JArray>();
             images = jsonservercont.SelectToken("images").ToObject<JArray>();
+            navbar = jsonservercont.SelectToken("navbar").ToObject<navbarEntry[]>();
             builtinurls = jsonservercont.SelectToken("builtin-urls").ToObject<string[]>();
         }
     }
