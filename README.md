@@ -30,3 +30,5 @@ running `msbuild` will result in a executable (`server.exe`)
 #### References
 
 * [Newtonsoft.Json.Net](https://github.com/JamesNK/Newtonsoft.Json)
+##### Contributing
+You are welcome to suggest new changes and do PRs

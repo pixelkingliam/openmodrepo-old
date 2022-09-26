@@ -1,0 +1,74 @@
+@import url('https://rsms.me/inter/inter.css');
+
+  html {
+    font-family: 'Inter', sans-serif;
+  }
+
+  @supports (font-variation-settings: normal) {
+    html {
+      font-family: 'Inter var', sans-serif;
+    }
+
+  }
+
+  body {
+    background-color: rgb(62, 68, 85);
+    margin: 0;
+
+  }
+
+  .Posterimage {
+    margin: 0px;
+    width: 11.73vw;
+  }
+
+  #navbar {
+    width: 100vw;
+    list-style-type: none;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333;
+    position: -webkit-sticky;
+    height: 5vh;
+    position: sticky;
+    top: 0;
+    max-width:100%;
+    
+  }
+
+
+
+  li a {
+    font-family: "Inter";
+    font-size: 1.5vh;
+    float: left;
+    display: block;
+    color: white;
+    text-align: start;
+    padding-right: 2vh;
+    padding-left: 2vh;
+    padding-top: 1.5vh;
+    padding-bottom: 1.5vh;
+    text-decoration: none;
+    width: fit-content;
+    height: 2vh;
+  }
+
+  .b {
+    float: left;
+
+  }
+
+  li a:hover {
+
+    background-color: rgb(248, 149, 0);
+
+  }
+
+  li a.activated {
+    background-color: rgb(0, 218, 83)
+  }
+
+  
