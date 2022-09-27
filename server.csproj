@@ -7,7 +7,7 @@
       <Compile Include="SRCS/RESP/html.cs"/>
       <Compile Include="SRCS/RESP/http.cs"/>
       <Compile Include="SRCS/content.cs"/>
-
+      <Compile Include="SRCS/b64encode.cs"/>
       <Reference Include="Newtonsoft.Json.dll"/>
     </ItemGroup>
     <Target Name="Build">
