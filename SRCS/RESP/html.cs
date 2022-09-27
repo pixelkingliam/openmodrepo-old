@@ -21,7 +21,7 @@ namespace HTTPResponses
             string ReplaceFinal = "<tr>";
             int i1 = 0;
             
-            string[] indexArray = File.ReadAllLines("HTML/index.html");
+            string[] indexArray = File.ReadAllLines("HTML/games.html");
             string[] OutputFile = indexArray;
             
             BuildNavBar(OutputFile, url);

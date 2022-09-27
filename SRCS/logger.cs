@@ -34,10 +34,10 @@ namespace Logger
         {
             Output(ToBeLogged, "NETWORK", ConsoleColor.Magenta, ConsoleColor.White);
         }
-        public static void Output(string TBL,string type, ConsoleColor BG, ConsoleColor FG)
+        public static void Output(string TBL, string type, ConsoleColor BG, ConsoleColor FG)
         {
             // create text to log and add log text to this session's log file
-            string tolog = "[" + Math.Round((((Convert.ToDouble(DateTimeOffset.Now.ToUnixTimeMilliseconds())) / (1000)) - Launch.Time), 2) + "s" + "]-[" + type +"]-" + TBL;
+            string tolog = "[" + Math.Round((((Convert.ToDouble(DateTimeOffset.Now.ToUnixTimeMilliseconds())) / (1000)) - Launch.Time), 2) + "s" + "]-[" + type + "]-" + TBL;
             File.AppendAllText(fn, tolog + Environment.NewLine);
             Console.BackgroundColor = BG;
             Console.ForegroundColor = FG;
@@ -61,7 +61,7 @@ namespace Logger
                 //get all the log filenames, remove the .log at the end and make them into an int, then add it to the UpdatedList[] list
                 foreach (var file in FileList)
                 {
-                    
+
                     string tmp = file;
                     tmp = tmp.Substring(0, tmp.Length - 4);
                     tmp = tmp.Remove(0, 5);

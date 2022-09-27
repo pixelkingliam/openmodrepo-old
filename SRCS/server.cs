@@ -13,20 +13,20 @@ using System.Threading.Tasks;
 
 namespace OpenModRepo
 {
-    
+
     class HttpServer
     {
-        public static HttpListener listener;    
+        public static HttpListener listener;
         public static string url;
-        
-            
 
-        
+
+
+
         public static async Task HandleIncomingConnections()
         {
             // if for any reason in the future we need to allow users to shutdown the server the bool runServer can be used
             bool runServer = true;
-            
+
             while (runServer)
             {
                 // Will wait here until we hear from a connection
@@ -40,40 +40,31 @@ namespace OpenModRepo
                 Log.Network(req.HttpMethod);
                 Log.Network(req.UserHostName);
                 Log.Network(req.UserAgent);
-                
-              
-                
-                // Make sure we don't increment the page views counter if `favicon.ico` is requested
+
+
+
                 byte[] data;
-                bool isimage;
-                try {
-                    if ((req.Url.AbsolutePath.Remove(8, req.Url.AbsolutePath.Length - 8) == "/Images/"))
-                    {
-                        isimage = true;
-                    }else{
-                        isimage=false;
-                    }
-                }
-                catch (Exception)
+                switch (req.Url.AbsolutePath.Split('/')[1])
                 {
-                    isimage = false;
-                }
-                if(!isimage)
-                {
-                    string url = req.Url.AbsolutePath;
-                    // Write the response info
-                    if(req.Url.AbsolutePath == "/")
-                    {
-                        url = Cont.homepage;
-                    }
-                    data = HTMLHandler.GetHTML(url);
-                    resp.ContentType = "text/html";
-                    resp.ContentEncoding = Encoding.UTF8;
-                }else{
-                    data = ImageHandler.GetImage(req.Url.AbsolutePath);
-                    resp.ContentType = ImageHandler.GetMIME(req.Url.AbsolutePath);//"image/png";
-                    
-                    
+                    case "Images":
+                        data = ImageHandler.GetImage(req.Url.AbsolutePath);
+                        resp.ContentType = ImageHandler.GetMIME(req.Url.AbsolutePath);
+                        break;
+                    case "css":
+                        data = CSSHandler.GetCSS(req.Url.AbsolutePath);
+                        resp.ContentType = "text/css";
+                        break;
+                    default :
+                        string url = req.Url.AbsolutePath;
+                        // Write the response info
+                        if (req.Url.AbsolutePath == "/")
+                        {
+                            url = Cont.homepage;
+                        }
+                        data = HTMLHandler.GetHTML(url);
+                        resp.ContentType = "text/html";
+                        resp.ContentEncoding = Encoding.UTF8;
+                        break;
                 }
                 resp.ContentLength64 = data.LongLength;
                 resp.StatusCode = HTTPStatus.GetCode(req.Url.AbsolutePath);
@@ -86,7 +77,7 @@ namespace OpenModRepo
 
         public static void Main(string[] args)
         {
-            AppDomain.CurrentDomain.ProcessExit += new EventHandler (OnProcessExit); 
+            AppDomain.CurrentDomain.ProcessExit += new EventHandler(OnProcessExit);
             Conf.Check();
             Conf.Init();
             Cont.Check();
@@ -100,7 +91,7 @@ namespace OpenModRepo
             listener.Prefixes.Add(url);
             listener.Start();
             Log.Success(String.Format("OpenModRepo Listenning on {0}", Conf.customip ? url : "port " + Conf.port));
-            
+
             // Handle requests
             Task listenTask = HandleIncomingConnections();
             listenTask.GetAwaiter().GetResult();
@@ -109,7 +100,7 @@ namespace OpenModRepo
             listener.Close();
         }
         // while empty at the moment this function will be used to save information when the server shut downs
-        static void OnProcessExit (object sender, EventArgs e)
+        static void OnProcessExit(object sender, EventArgs e)
         {
             Log.Info("Shutting Down...");
         }

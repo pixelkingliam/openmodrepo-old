@@ -1,0 +1,33 @@
+#gamecard {
+    overflow: hidden;
+    height: 46.43vh;
+    float: left;
+    background: rgb(133, 133, 133);
+    width: 12   vw;
+    text-align: center;
+    text-align: top;
+    margin: 1vw;
+    color: black;
+    padding: 0%;
+    border-radius: 1.01vw;
+    box-shadow: 0.78vw 0.78vw 2.34vw;
+  }
+
+  #gamecard a {
+    text-decoration: none;
+    color: black;
+  }
+
+  .description {
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: top;
+    max-height: 8.59vw;
+    margin: 0.39vw;
+  }
+
+  .title {
+    height: 1.56vw;
+    white-space: nowrap;
+  }

@@ -1,0 +1,65 @@
+#topoverlay {
+    background: rgb(55, 66, 68);
+    margin: 0px;
+    padding: 0px;
+    vertical-align: top;
+    height: 25vh;
+    width: 100%;
+
+  }
+
+  #topoverlay h1 {
+    font-size: 4vw;
+    margin: 0;
+    margin-left: 1vw;
+    text-align: start;
+
+  }
+
+  #topoverlay p {
+    font-size: 1vw;
+    margin-left: 1vw;
+    text-align: start;
+
+  }
+  #topoverlay img
+  {
+    height: 22.5vh;
+  }
+
+  #sideoverlay {
+    background: rgb(24, 42, 51);
+    margin: 0px;
+    padding: 0px;
+    vertical-align: top;
+    height: 70vh;
+    width: 20%;
+  }
+  #sideoverlay ul {
+    margin: 5%;
+    padding-left: 0;
+    height: 65vh; 
+  	overflow-y: auto;
+  }
+  #sideoverlay ul a {
+    text-decoration: none;
+  }
+  #sideoverlay ul a div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin : 2vh;
+    margin-left: 0;
+    margin-top : 0;
+    padding: 0.5vh;
+    height: 5vh;
+    background-color:rgb(75, 110, 88) ;
+    border:  solid rgb(19, 37, 46);
+    border-radius: 1.17vw;
+  }
+  #sideoverlay ul a div p
+  {
+    color: black;
+    margin : 0;
+
+  }

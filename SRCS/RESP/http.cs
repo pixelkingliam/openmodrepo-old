@@ -13,11 +13,12 @@ namespace HTTPResponses
         {
             // if none of the check pass for whatever reason the server should default to 501
             int code = 501; // Not implemented
-            
-            if(HTTPUrls.ValidUrls.Contains(url))
+
+            if (HTTPUrls.ValidUrls.Contains(url))
             {
                 code = 200; // OK
-            }else
+            }
+            else
             {
                 code = 404; // Not found
             }
@@ -33,15 +34,16 @@ namespace HTTPResponses
             int arraysize = 0;
             var jsoncontents = JObject.Parse(File.ReadAllText(@"CONF/content.json"));
             // this section of the function calculates how big the array should be
-            arraysize = arraysize + (jsoncontents["games"].ToObject<JArray>()).Count;
-            arraysize = arraysize + (jsoncontents["images"].ToObject<JArray>()).Count;
-            arraysize = arraysize + (jsoncontents["builtin-urls"].ToObject<JArray>()).Count;
+            arraysize += (jsoncontents["games"].ToObject<JArray>()).Count;
+            arraysize += (jsoncontents["images"].ToObject<JArray>()).Count;
+            arraysize += (jsoncontents["builtin-urls"].ToObject<JArray>()).Count;
+            arraysize += 3; // amount of hard-coded urls such as CSS files
             Log.Info("Loading " + arraysize + " Urls");
             // this section adds all the urls to the array
             urlarray = new string[arraysize];
             int i = 0;
             // add games
-            while(i < jsoncontents["games"].ToObject<JArray>().Count)
+            while (i < jsoncontents["games"].ToObject<JArray>().Count)
             {
                 urlarray[i] = "/game/" + i;
                 Log.Success("Loaded " + urlarray[i]);
@@ -61,8 +63,17 @@ namespace HTTPResponses
                 Log.Success("Loaded " + urlarray[i]);
                 i++;
             }
+            urlarray[i] = "/css/main.css";
+            i++;
+            urlarray[i] = "/css/gamepage.css";
+            i++;
+            urlarray[i] = "/css/games.css";
+            i++;
+            Log.Success("Loaded /css/*.css");
+            // add non-removable urls (styling)
+
             return urlarray;
         }
-        
+
     }
 }
