@@ -118,23 +118,23 @@ namespace Base64Var
     class B64Math
     {
         // random object used for this class
-        private Random b64random = new Random();
+        private static Random b64random = new Random();
         // make a random B64 variable, a limit can also be passed on via a character of a B64 value
-        public virtual B64 Random()
+        public static B64 Random()
         {
             return new B64(Convert.ToByte(b64random.Next(64)));
         }
-        public virtual B64 Random(B64 limit)
+        public static B64 Random(B64 limit)
         {
             return new B64(Convert.ToByte(b64random.Next(B64Convert.ToInt32(limit)+1)));
 
         }
-        public virtual B64 Random(char limit)
+        public static B64 Random(char limit)
         {
             return new B64(Convert.ToByte(b64random.Next(B64Convert.ToInt32(B64Convert.CharToB64(limit)) + 1)));
         }
         // make an array of random B64 values, an array size must be passed on and optionally a char/B64 limit
-        public virtual B64[] RandomArray(int arraysize)
+        public static B64[] RandomArray(int arraysize)
         {
             B64[] result = new B64[arraysize + 1];
             for(int i = 0; i <= arraysize;i++)
@@ -143,7 +143,7 @@ namespace Base64Var
             }
             return result;
         }
-        public virtual B64[] RandomArray(int arraysize, B64 limit)
+        public static B64[] RandomArray(int arraysize, B64 limit)
         {
             B64[] result = new B64[arraysize + 1];
             for(int i = 0; i <= arraysize;i++)
@@ -152,7 +152,7 @@ namespace Base64Var
             }
             return result;
         }
-        public virtual B64[] RandomArray(int arraysize, char limit)
+        public static B64[] RandomArray(int arraysize, char limit)
         {
             B64[] result = new B64[arraysize + 1];
             for(int i = 0; i <= arraysize;i++)

@@ -9,7 +9,10 @@
       <Compile Include="SRCS/RESP/css.cs"/>
       <Compile Include="SRCS/content.cs"/>
       <Compile Include="SRCS/b64encode.cs"/>
+      <Compile Include="SRCS/accounts.cs"/>
+      <Compile Include="SRCS/sohash.cs"/>
       <Reference Include="Newtonsoft.Json.dll"/>
+
     </ItemGroup>
     <Target Name="Build">
       <Csc References="@(Reference)" Sources="@(Compile)" OutputAssembly="server.exe"/>  
