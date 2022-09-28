@@ -100,6 +100,19 @@ namespace Base64Var
         {
             return new string(B64ArrayToCharArray(b64array));
         }
+        public static B64[] CharArrayToB64Array(char[] chararray)
+        {
+            B64[] result = new B64[chararray.Length];
+            for(int i = 0; i < chararray.Length;i++)
+            {
+                result[i] = CharToB64(chararray[i]);
+            }
+            return result;
+        }
+        public static B64[] StringToB64Array(string inputstring)
+        {
+            return (CharArrayToB64Array(inputstring.ToCharArray()));
+        }
     }
     // This class contains function for constructing B64 variables and arrays
     class B64Math
