@@ -2,6 +2,7 @@ using System;
 using Logger;
 using Config;
 using Content;
+using Accounts;
 using System.IO;
 using System.Net;
 using System.Text;
@@ -103,6 +104,8 @@ namespace OpenModRepo
         static void OnProcessExit(object sender, EventArgs e)
         {
             Log.Info("Shutting Down...");
+            AccountHandler.SaveAccounts();
+            Log.Success("Saved all accounts!");
         }
     }
 }

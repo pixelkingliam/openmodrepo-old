@@ -6,16 +6,15 @@ using Base64Var;
 using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-
+using System.Collections.Generic;
 namespace Accounts
 {
     class AccountHandler
     {
+        static List<Account> accounts = new List<Account>();
 
         public static bool Exists(B64[] password)
-        {
-            Account[] accounts = JArray.Parse(File.ReadAllText(@"USER/accounts.json")).ToObject<Account[]>();
-            
+        {            
             return accounts.Any(item => item.hash == Hash.HString(B64Convert.B64ArrayToString(password)));
         }
         public static void Generate()
@@ -37,27 +36,27 @@ namespace Accounts
                 Log.Error("USER/accounts.json is invalid JSON");
                 Environment.Exit(1);
             }
+            accounts = JArray.Parse(File.ReadAllText(@"USER/accounts.json")).ToObject<List<Account>>();
         }
         public static Account GetAccount(B64[] password)
         {   
-            Account[] accounts = JArray.Parse(File.ReadAllText(@"USER/accounts.json")).ToObject<Account[]>();
             return  accounts.SingleOrDefault(item => item.hash == Hash.HString(B64Convert.B64ArrayToString(password)));
         }
         public static Account GetAccount(int index)
         {   
-            Account[] accounts = JArray.Parse(File.ReadAllText(@"USER/accounts.json")).ToObject<Account[]>();
-            return  accounts[index];
+            return accounts[index];
         }
         public static void MakeAccount(B64[] password)
         {
-            JArray accounts = JArray.Parse(File.ReadAllText(@"USER/accounts.json"));
             Account account = new Account();
             account.creationdate = DateTime.Now.ToString("hh:mm:ss tt");
             account.hash = Hash.HString(B64Convert.B64ArrayToString(password));
-            accounts.Add(JObject.FromObject(account)); 
-            File.WriteAllText(@"USER/accounts.json", accounts.ToString());
+            accounts.Add(account); 
         }
-
+        public static void SaveAccounts()
+        {
+            File.WriteAllText(@"USER/accounts.json", JArray.FromObject(accounts).ToString());
+        }
     }
     class Account
     {
