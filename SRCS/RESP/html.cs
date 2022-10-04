@@ -1,7 +1,9 @@
 using System;
 using Logger;
 using Content;
+using Accounts;
 using System.IO;
+using Base64Var;
 using System.Net;
 using System.Text;
 using System.Linq;
@@ -13,7 +15,8 @@ namespace HTTPResponses
 {
     class  HTMLHandler
     {
-        public static byte[] GetHTML(string url)
+        private static List<B64[]> validpasswords = new List<B64[]>();
+        public static byte[] GetHTML(HttpListenerRequest req, string url)
         {
             var games_ = JObject.Parse(File.ReadAllText(@"CONF/content.json"));
             var games = games_["games"].ToObject<JArray>();
@@ -21,6 +24,10 @@ namespace HTTPResponses
             string ReplaceFinal = "<tr>";
             int i1 = 0;
             
+            Stream body = req.InputStream;
+            System.Text.Encoding encoding = req.ContentEncoding;
+            var bodyreader =  new System.IO.StreamReader(body, encoding);
+            string bodycontent = bodyreader.ReadToEnd().Replace("%2F", "/").Replace("%2B", "+");
             string[] indexArray = File.ReadAllLines("HTML/games.html");
             string[] OutputFile = indexArray;
             
@@ -124,6 +131,42 @@ namespace HTTPResponses
                                     
                                     
                                     i2++;
+                                }
+                                break;
+                            case "signup":
+                                OutputFile = File.ReadAllLines(@"HTML/signin.html");
+                                BuildNavBar(OutputFile, url);
+                                int i3 = 0;
+                                int i4 = 0;
+                               
+                                if(req.HttpMethod == "POST")
+                                {
+                                    
+                                    int pindex = 0;
+                                    for (; pindex <= validpasswords.Count - 1; pindex++)
+                                    {
+                                        string validpw = B64Convert.B64ArrayToString(validpasswords[pindex]);
+                                        string questionnedpw = bodycontent.Split('=')[1];
+                                        if( validpw == questionnedpw)
+                                        {   
+                                            AccountHandler.MakeAccount(validpasswords[pindex]);
+                                            validpasswords.Remove(validpasswords[pindex]);
+                                        }
+                                    }
+                                    
+                                }
+
+                                foreach (string item in OutputFile)
+                                {
+                                    if (item.Contains("<p>contentgoeshere!</p>"))
+                                    {
+                                        B64[] base64 = (B64Math.RandomArray(12));
+                                        validpasswords.Add(base64);
+                                        string output = "<h1>" + B64Convert.B64ArrayToString(base64) + "</h1>\n<form method=\"POST\" action=\"/signup\" >\n<input type=\"hidden\" name=\"pass\" value=\"" + B64Convert.B64ArrayToString(base64) + "\" />\n<input type=\"submit\" value=\"claim\"/>\n</form>";
+                                        OutputFile[i3] = output;
+                                        
+                                    }
+                                    i3++;
                                 }
                                 break;
                             default:

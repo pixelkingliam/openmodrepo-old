@@ -62,7 +62,7 @@ namespace OpenModRepo
                         {
                             url = Cont.homepage;
                         }
-                        data = HTMLHandler.GetHTML(url);
+                        data = HTMLHandler.GetHTML(req, url);
                         resp.ContentType = "text/html";
                         resp.ContentEncoding = Encoding.UTF8;
                         break;
@@ -87,6 +87,8 @@ namespace OpenModRepo
             url = string.Format("http://{0}:{1}/", Conf.customip ? Conf.ip : "*", Conf.port);
             HTTPUrls.ValidUrls = HTTPUrls.GenUrls();
             Log.Clean(Conf.logcount);
+            AccountHandler.Generate();
+            Log.Success("Loaded Accounts.");
             // Create a Http server and start listening for incoming connections
             listener = new HttpListener();
             listener.Prefixes.Add(url);
