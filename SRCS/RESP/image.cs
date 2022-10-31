@@ -32,7 +32,7 @@ namespace HTTPResponses
             {
                 if (("/Images/" + item["URL"].ToString()) == url)
                 {
-                    // GetMineSwitch() with the user-defined type passed on
+                    // GetMimeSwitch() with the user-defined type passed on
                     resultstring = GetMimeSwitch(item["Type"].ToString(), item["File"].ToString());
                     break;
                 }

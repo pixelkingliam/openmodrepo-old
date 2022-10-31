@@ -10,11 +10,12 @@
       <Compile Include="SRCS/content.cs"/>
       <Compile Include="SRCS/b64encode.cs"/>
       <Compile Include="SRCS/accounts.cs"/>
-      <Compile Include="SRCS/sohash.cs"/>
+      <Compile Include="SRCS/somisc.cs"/>
       <Reference Include="Newtonsoft.Json.dll"/>
 
     </ItemGroup>
+
     <Target Name="Build">
-      <Csc References="@(Reference)" Sources="@(Compile)" OutputAssembly="server.exe"/>  
+      <Csc DebugType="portable" References="@(Reference)" Sources="@(Compile)" OutputAssembly="server.exe"/>  
     </Target>
   </Project>

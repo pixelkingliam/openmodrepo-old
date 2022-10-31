@@ -1,7 +1,9 @@
+// contains functions obtained from Stack Overflow that do not fit in a certain file/namespace
+
 using Logger;
 using System;
 using System.Security.Cryptography;
-namespace SOHash
+namespace SOMisc
 {
     public class Hash
     {
@@ -28,5 +30,27 @@ namespace SOHash
                 return hash;
             }
         }
+    }
+    class Soarr//ay
+    {
+        /*a/26880541/20055376*/
+
+        // search for the index inside of a larger array
+        public static int SearchBytes(byte[] haystack, byte[] needle)
+        {
+            var len = needle.Length;
+            var limit = haystack.Length - len;
+            for (var i = 0; i <= limit; i++)
+            {
+                var k = 0;
+                for (; k < len; k++)
+                {
+                    if (needle[k] != haystack[i + k]) break;
+                }
+                if (k == len) return i;
+            }
+            return -1;
+        }
+
     }
 }

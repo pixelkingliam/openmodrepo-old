@@ -7,3 +7,5 @@ IMGS/* \
 IMGS/
 USER/*
 *.exe
+*.pdb
+.vscode/

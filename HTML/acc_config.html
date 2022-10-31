@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<style>
+  @import '/css/main.css';
+</style>
+
+<head>
+  <title>OpenModRepo</title>
+</head>
+
+<body>
+  <ul id="navbar">
+
+    <p>navbargoeshere!!</p>
+
+  </ul>
+  <br>
+  <form method="post" enctype="multipart/form-data" action="/account/uploadpfp">
+    <label for="Uploadfile">Upload a profile picture.</label><br>
+    <input name="Uploadfile" type="file" id="uname">
+    <button type="submit">Save!</button>
+  </form>
+  <form method="post" action="/account/configure">
+    <label for="uname">Username:</label><br>
+    <input name="uname" value="{0}" type="text" id="uname"><br>
+    <label for="locat">Location:</label><br>
+    <input name="locat" value="{1}" type="text" id="locat"><br>
+
+    <button type="submit">Save!</button>
+  </form>
+
+
+
+
+
+</body>
+
+</html>

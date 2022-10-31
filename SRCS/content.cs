@@ -44,16 +44,13 @@ namespace Content
                     Environment.Exit(1);
                 }
                 var jsonservercont = JObject.Parse(System.IO.File.ReadAllText(@"CONF/content.json"));
-                if (
+                if (!(
                         jsonservercont.ContainsKey("games") ||
                         jsonservercont.ContainsKey("hostname ") ||
                         jsonservercont.ContainsKey("images") ||
                         jsonservercont.ContainsKey("builtin-urls") ||
                         jsonservercont.ContainsKey("navbar")
-                    )
-                {
-                }
-                else
+                ))
                 {
                     File.Delete(@"CONF/content.json");
                     Create();
@@ -72,7 +69,7 @@ namespace Content
             jsonservercont["images"] = images;
             jsonservercont["navbar"] = JArray.FromObject(navbar);
             // a blank content.json should contain a full builtin-urls array
-            jsonservercont["builtin-urls"] = new JArray() { "/games" };
+            jsonservercont["builtin-urls"] = new JArray() { "/games", "/upload","/signup", "/login", "/account", "/account/configure", "/account/uploadpfp" };
             File.WriteAllText(@"CONF/content.json", jsonservercont.ToString());
         }
         // load from variables from content.json, if this does not run then Create() and Check() serve no purpose

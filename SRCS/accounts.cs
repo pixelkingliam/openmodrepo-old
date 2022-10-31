@@ -1,6 +1,6 @@
 using Logger;
 using System;
-using SOHash;
+using SOMisc;
 using System.IO;
 using Base64Var;
 using System.Linq;
@@ -12,7 +12,8 @@ namespace Accounts
     class AccountHandler
     {
         static List<Account> accounts = new List<Account>();
-
+        //                      pkey, index
+        public static Dictionary<string, int> PrivateKeys = new Dictionary<string, int>();
         public static bool Exists(B64[] password)
         {            
             return accounts.Any(item => item.hash == Hash.HString(B64Convert.B64ArrayToString(password)));
@@ -38,6 +39,15 @@ namespace Accounts
             }
             accounts = JArray.Parse(File.ReadAllText(@"USER/accounts.json")).ToObject<List<Account>>();
         }
+        public static int GetIndex(B64[] password)
+        {
+
+            return accounts.FindIndex(item => item.hash == Hash.HString(B64Convert.B64ArrayToString(password)));
+        }
+        public static int GetIndex(string PKey)
+        {
+            return PrivateKeys[PKey];
+        }
         public static Account GetAccount(B64[] password)
         {   
             return  accounts.SingleOrDefault(item => item.hash == Hash.HString(B64Convert.B64ArrayToString(password)));
@@ -46,13 +56,25 @@ namespace Accounts
         {   
             return accounts[index];
         }
+        public static Account GetAccount(string Pkey)
+        {   
+            return accounts[PrivateKeys[Pkey]];
+        }
         public static void MakeAccount(B64[] password)
         {
             Account account = new Account();
             account.creationdate = DateTime.Now.ToString("hh:mm:ss tt");
             account.hash = Hash.HString(B64Convert.B64ArrayToString(password));
+            account.username = "DefaultUsername";
+            account.location = "";
             accounts.Add(account); 
+            Directory.CreateDirectory(@"USER/" + (accounts.Count - 1));
         }
+        public static void ReplaceAccount(int index, Account Newacc)
+        {
+            accounts[index] = Newacc;
+        }
+        
         public static void SaveAccounts()
         {
             File.WriteAllText(@"USER/accounts.json", JArray.FromObject(accounts).ToString());
@@ -62,6 +84,8 @@ namespace Accounts
     {
         public string hash;
         public string creationdate;
+        public string username;
+        public string location;
     }
 
 }

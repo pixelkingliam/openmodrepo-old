@@ -19,7 +19,7 @@ namespace OpenModRepo
     {
         public static HttpListener listener;
         public static string url;
-
+        public static HttpListenerResponse resp;
 
 
 
@@ -35,7 +35,7 @@ namespace OpenModRepo
 
                 // Peel out the requests and response objects
                 HttpListenerRequest req = ctx.Request;
-                HttpListenerResponse resp = ctx.Response;
+                resp = ctx.Response;
                 // Print out some info about t  he request
                 Log.Network(req.Url.ToString());
                 Log.Network(req.HttpMethod);
@@ -86,7 +86,7 @@ namespace OpenModRepo
 
             url = string.Format("http://{0}:{1}/", Conf.customip ? Conf.ip : "*", Conf.port);
             HTTPUrls.ValidUrls = HTTPUrls.GenUrls();
-            Log.Clean(Conf.logcount);
+            Log.Clean(Conf.logcount + 1);
             AccountHandler.Generate();
             Log.Success("Loaded Accounts.");
             // Create a Http server and start listening for incoming connections
