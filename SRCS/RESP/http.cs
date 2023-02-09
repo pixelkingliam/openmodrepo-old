@@ -38,28 +38,43 @@ namespace HTTPResponses
             arraysize += (jsoncontents["images"].ToObject<JArray>()).Count;
             arraysize += (jsoncontents["builtin-urls"].ToObject<JArray>()).Count;
             arraysize += 3; // amount of hard-coded urls such as CSS files
+            arraysize += JArray.Parse(File.ReadAllText(@"USER/accounts.json")).Count;
             Log.Info("Loading " + arraysize + " Urls");
             // this section adds all the urls to the array
             urlarray = new string[arraysize];
             int i = 0;
             // add games
-            while (i < jsoncontents["games"].ToObject<JArray>().Count)
+
+            // these loops are ugly i should remake them using for
+            //for (;i < JArray.Parse(File.ReadAllText(@"USER/accounts.json")).Count;i++)
+            //{
+                
+            //}
+            int iAfterFunc = i;
+            for (int i1 = 0; i1 < JArray.Parse(File.ReadAllText(@"USER/accounts.json")).Count; i1++)
             {
-                urlarray[i] = "/game/" + i;
+                urlarray[i] = "/Images/pfp/" + i1;
+                Log.Success("Loaded " + urlarray[i]);
+                i++;
+            }
+
+            for (int i1 = 0; i1 < jsoncontents["games"].ToObject<JArray>().Count; i1++)
+            {
+                urlarray[i] = "/game/" + i1;
                 Log.Success("Loaded " + urlarray[i]);
                 i++;
             }
             // add images
-            foreach (var item in jsoncontents["images"].ToObject<JArray>())
+            for (int i1 = 0; i1 < jsoncontents["images"].ToObject<JArray>().Count; i1++)
             {
-                urlarray[i] = "/Images/" + item["URL"].ToString();
+                urlarray[i] = "/Images/" + jsoncontents["images"].ToObject<JArray>()[i1]["URL"].ToString();
                 Log.Success("Loaded " + urlarray[i]);
                 i++;
             }
             // add built in urls
-            foreach (var item in jsoncontents["builtin-urls"].ToObject<JArray>())
+            for (int i1 = 0; i1 < jsoncontents["builtin-urls"].ToObject<JArray>().Count; i1++)
             {
-                urlarray[i] = item.ToString();
+                urlarray[i] = jsoncontents["builtin-urls"].ToObject<JArray>()[i1].ToString();
                 Log.Success("Loaded " + urlarray[i]);
                 i++;
             }

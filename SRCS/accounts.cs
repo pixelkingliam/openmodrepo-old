@@ -14,9 +14,27 @@ namespace Accounts
         static List<Account> accounts = new List<Account>();
         //                      pkey, index
         public static Dictionary<string, int> PrivateKeys = new Dictionary<string, int>();
+        public static void Check()
+        {
+            var AccountsJsonPath = @"USER/accounts.json";
+            var UserPath = @"USER";
+            if (!Directory.Exists(UserPath))
+            {
+                Directory.CreateDirectory(UserPath);
+            }
+            else
+            if (!File.Exists(AccountsJsonPath))
+            {
+                File.WriteAllText(AccountsJsonPath, new JArray().ToString());
+            }
+        }
         public static bool Exists(B64[] password)
         {            
             return accounts.Any(item => item.hash == Hash.HString(B64Convert.B64ArrayToString(password)));
+        }
+        public static bool Exists(string Pkey)
+        {
+            return GetIndex(Pkey) == -1 ? false : true;
         }
         public static void Generate()
         {

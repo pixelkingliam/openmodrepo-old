@@ -10,6 +10,8 @@ HTTP Server providing a easy to setup repository for game modifications
 
 #### Known bugs/issues
 * /games page looks like ass and is broken for whatever reason
+* /account page isn't done
+* HTTP handling is incredibly bad and should be remade
 ## Usage
 
 The compiled binary (`server.exe`) can be ran

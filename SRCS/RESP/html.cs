@@ -28,7 +28,7 @@ namespace HTTPResponses
             int i1 = 0;
 
 
-            
+
             MemoryStream memstream = new MemoryStream();
             var ass = req.InputStream;
             req.InputStream.CopyTo(memstream);
@@ -37,21 +37,21 @@ namespace HTTPResponses
             string bodycontent = encoding.GetString(bodycontent8);
             string[] indexArray = File.ReadAllLines("HTML/games.html");
             string[] OutputFile = indexArray;
-            byte[] tofind = new byte[] { 13,10,13,10 };
+            byte[] tofind = new byte[] { 13, 10, 13, 10 };
 
             if (req.HttpMethod == "POST")
             {
                 if (req.ContentType.Contains("multipart/form-data"))
                 {
                     // remove header of multipart form data
-                    Array.Copy(bodycontent8, Soarr.SearchBytes(bodycontent8, tofind) + 4 ,bodycontent8, 0 ,bodycontent8.Length - Soarr.SearchBytes(bodycontent8, tofind) - 4);
+                    Array.Copy(bodycontent8, Soarr.SearchBytes(bodycontent8, tofind) + 4, bodycontent8, 0, bodycontent8.Length - Soarr.SearchBytes(bodycontent8, tofind) - 4);
 
                     // remove footer of multipart form data
                     byte[] Boundary = encoding.GetBytes(req.ContentType.Split(';')[1].Split('=')[1]);
                     Array.Resize(ref bodycontent8, Soarr.SearchBytes(bodycontent8, Boundary) - 4);
                 }
             }
-            BuildNavBar(OutputFile, url);
+            BuildNavBar(OutputFile, url, req);
             if (HTTPUrls.ValidUrls.Contains(url))
             {
                 double title_fontsize = 0;
@@ -115,7 +115,7 @@ namespace HTTPResponses
                         ushort game = Convert.ToUInt16(url.Split("/")[2]);
                         int i2 = 0;
                         OutputFile = File.ReadAllLines(@"HTML/gamepage.html");
-                        BuildNavBar(OutputFile, url);
+                        BuildNavBar(OutputFile, url, req);
                         foreach (string item in OutputFile)
                         {
                             if (item.Contains("<h1>topcontgoeshere!!</h1>"))
@@ -157,7 +157,7 @@ namespace HTTPResponses
                         break;
                     case "signup":
                         OutputFile = File.ReadAllLines(@"HTML/signin.html");
-                        BuildNavBar(OutputFile, url);
+                        BuildNavBar(OutputFile, url, req);
                         int i3 = 0;
 
                         if (req.HttpMethod == "POST")
@@ -194,12 +194,26 @@ namespace HTTPResponses
                             i3++;
                         }
                         break;
+                    
                     case "account":
+                        Log.Error(((req.Cookies["Pkey"] == null).ToString()));
+                        Log.Error((!AccountHandler.PrivateKeys.ContainsKey(req.Cookies["Pkey"].Value)).ToString());
+                        if (req.Cookies["Pkey"] == null || !AccountHandler.PrivateKeys.ContainsKey(req.Cookies["Pkey"].Value))
+                        {
+                            // this code isn't ran, find out why
+                            HttpServer.resp.Redirect("/login");
+                            break;
+                            Log.Error("klol");
+                        }
+                        if (url.Split("/").Length >= 2)
+                        {
+                            break;
+                        }
                         switch (url.Split("/")[2])
                         {
                             case "configure":
                                 OutputFile = File.ReadAllLines(@"HTML/acc_config.html");
-                                BuildNavBar(OutputFile, url);
+                                BuildNavBar(OutputFile, url, req);
                                 if (req.HttpMethod == "GET")
                                 {
                                     if (req.Cookies["Pkey"] != null)
@@ -253,7 +267,7 @@ namespace HTTPResponses
                         break;
                     case "login":
                         OutputFile = File.ReadAllLines(@"HTML/login.html");
-                        BuildNavBar(OutputFile, url);
+                        BuildNavBar(OutputFile, url, req);
                         if (req.HttpMethod == "POST")
                         {
                             string privkey = Hash.HString(Convert.ToString(rnd.Next()));
@@ -272,17 +286,16 @@ namespace HTTPResponses
             }
             else
             {
-                // 404 handling, part of this code should be rewritten for the navbar rework
                 OutputFile = File.ReadAllLines(@"HTML/404.html");
                 i1 = 0;
-                BuildNavBar(OutputFile, url);
+                BuildNavBar(OutputFile, url, req);
                 i1 = 0;
             }
             // return the html file in bytes
             return Encoding.UTF8.GetBytes(string.Join("", OutputFile));
 
         }
-        static string[] BuildNavBar(string[] Template, string url)
+        static string[] BuildNavBar(string[] Template, string url, HttpListenerRequest req)
         {
             int i1 = 0;
             string navbarResults = "";
@@ -293,7 +306,8 @@ namespace HTTPResponses
                 {
                     Hclass = "class=\"activated\"";
                 }
-                navbarResults = navbarResults + string.Format("<li><a {0} href=\"{1}\">{2}</a></li>\n", Hclass, item.Link, item.Name);
+                navbarResults += string.Format("<li><a {0} href=\"{1}\">{2}</a></li>\n", Hclass, item.Link, item.Name);
+                //navbarResults += "<li><a Login href=\"{1}\">Sign-in</a></li>\n";
             }
             foreach (string item in Template)
             {
@@ -301,6 +315,31 @@ namespace HTTPResponses
                 {
                     Template[i1] = navbarResults;
                 }
+                if (item.Contains("<p>logbargoeshere!!</p>"))
+                {
+                    double username_fontsize = 1.11;
+                    try
+                    {
+                        if (req.Cookies["Pkey"] != null && AccountHandler.Exists(req.Cookies["Pkey"].Value))
+                        {
+                            if (AccountHandler.GetAccount(req.Cookies["Pkey"].Value).username.Length > 15) // only resize font if it can't fit in the first place
+                            {//this method (the one commented out) is not constant for getting vw font size, a new method should preferably be found
+                                //username_fontsize = 100 * (23 - (((AccountHandler.GetAccount(req.Cookies["Pkey"].Value).username.Length - 15* 0.608 ))));///1280); /* obtained via smallest font that fits w/ char count > string Lgnt devided by def font size*/
+                            }
+                            Template[i1] = String.Format("<li class=\"username\"><a href=\"/account\" >{0}</a><img src=\"/Images/pfp/{1}\"></button></li>\n",AccountHandler.GetAccount(req.Cookies["Pkey"].Value).username, AccountHandler.GetIndex(req.Cookies["Pkey"].Value));
+                        }
+                        else
+                        {
+                            Template[i1] = "<li><a href=\"/login\">Log-in</a></li>\n<li><a href=\"/signup\">Sign-Up</a></li>\n";
+                        }
+                    }
+                    catch (Exception)
+                    {
+                        Template[i1] = "<li><a href=\"/login\">Log-in</a></li>\n<li><a href=\"/signup\">Sign-Up</a></li>\n";
+
+                    }
+                }
+
                 i1++;
             }
             return Template;

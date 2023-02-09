@@ -83,7 +83,7 @@ namespace OpenModRepo
             Conf.Init();
             Cont.Check();
             Cont.Init();
-
+            AccountHandler.Check();
             url = string.Format("http://{0}:{1}/", Conf.customip ? Conf.ip : "*", Conf.port);
             HTTPUrls.ValidUrls = HTTPUrls.GenUrls();
             Log.Clean(Conf.logcount + 1);
