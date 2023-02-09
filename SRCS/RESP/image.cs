@@ -1,6 +1,7 @@
 using System;
 using Logger;
 using System.IO;
+using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 namespace HTTPResponses
@@ -10,14 +11,30 @@ namespace HTTPResponses
         static JArray jsonimages = (JArray)JObject.Parse(File.ReadAllText("CONF/content.json")).SelectToken("images");
         public static byte[] GetImage(string url)
         {
-            // Mono complains if this is not assigned to something before, in all case this wont be returned
-            byte[] resultarray = new byte[2] { 1, 1 };
-            foreach (var item in jsonimages)
-            {
-                if (("/Images/" + item["URL"].ToString()) == url)
+
+            byte[] resultarray = new byte[3]{52, 48, 52}; // default, ASCII for `404`
+            if (url.Split('/')[1] == "Images")
+            {                
+                if (url.Split('/').Length == 3)
+                {       
+                    if(jsonimages.Any(item => (string)item["URL"] == url.Split('/')[2]))//Where(item => item is JObject ? ((JObject)item).ContainsKey(url.Split('/')[2]) : false))
+                    {
+                        resultarray = File.ReadAllBytes((string)jsonimages.SingleOrDefault(item => (string)item["URL"] == url.Split('/')[2])["File"]);
+                    }              
+                }else if (url.Split('/').Length >= 4)
                 {
-                    resultarray = File.ReadAllBytes(item["File"].ToString());
-                    break;
+                    switch (url.Split('/')[2])
+                    {
+                        case "pfp":
+                            if(url.Split('/')[3] is not null)
+                            {
+                                if(File.Exists(String.Format(@"USER/{0}/pfp", url.Split("/")[3])))
+                                {
+                                    resultarray = File.ReadAllBytes(String.Format(@"USER/{0}/pfp", url.Split("/")[3]));
+                                }
+                            }
+                            break;
+                    }
                 }
             }
             // return image file in byte[]
@@ -39,7 +56,7 @@ namespace HTTPResponses
             }
             return resultstring;
         }
-        // non public function used in GetMIME
+        
         static string GetMimeSwitch(string ProposedType, string ProposedFile)
         {
             string resultsring = "";
@@ -63,6 +80,7 @@ namespace HTTPResponses
                     break;
                 case "auto":
                     // if auto is the type given by the user this will call the function again but with the file extension as the proposed type insteads
+                    // note: using magic bytes for the file type might be smarter
                     FileInfo fi = new FileInfo(ProposedFile);
                     resultsring = GetMimeSwitch(fi.Extension.Remove(0, 1), ProposedFile);
                     break;
