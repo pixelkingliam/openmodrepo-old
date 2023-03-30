@@ -1,5 +1,6 @@
+# DEPRECATED
+## This is no longer working on as this is a flawed attempt at an idea.
 # openmodrepo
-
 HTTP Server providing a easy to setup repository for game modifications
 
 #### Features
